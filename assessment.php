@@ -270,6 +270,18 @@ class VMS extends CLP {
    * @return  void
    */
   protected static function fizzbuzz($n) {
+    for ($i=1; $i <= $n; $i++){
+      if ( $i % 3 == 0 && $i % 5 == 0 ) {
+        echo "FizzBuzz";
+      } elseif ( $i % 3 == 0 ) {
+        echo "Fizz";
+      } elseif ( $i % 5 == 0 ) {
+        echo "Buzz";
+      } else {
+        echo $i;
+      }
+      echo "\n";
+    }
   }
 
   /**
@@ -294,7 +306,29 @@ class VMS extends CLP {
    * @param   int   $players    Number of players who start the game.
    * @return  int
    */
+  protected static function getLastElement($list,$j){
+    foreach($list as $key => $value){
+      if($j==2){
+        unset($list[$key]);
+        $j=1;
+      }
+      else{
+        $j++;
+      }
+    }
+    if(count($list)==1){
+      return array_values($list);
+    }
+    return self::getLastElement($list,$j);
+  }
+
   protected static function onlySurvivor($players) {
+    for ($i=1; $i <=$players ; $i++) {
+      $list[] = $i;
+    }
+
+    $survive = self::getLastElement($list,1);
+    return $survive[0];
   }
 
   /**
@@ -310,6 +344,10 @@ class VMS extends CLP {
 
     // Store major number groups.
     $groups = array();
+    $groups[] = (object)array('label'   =>  ' trillion',
+                              'divisor' =>  1000000000000);
+    $groups[] = (object)array('label'   =>  ' billion',
+                              'divisor' =>  1000000000);
     $groups[] = (object)array('label'   =>  ' million',
                               'divisor' =>  1000000);
     $groups[] = (object)array('label'   =>  ' thousand',
@@ -394,7 +432,7 @@ class VMS extends CLP {
         $onesPosition = $number % 10;
         if ($tensPosition > 0 && $onesPosition > 0) {
           $result[] = $tens[$tensPosition]
-                    . ' '
+                    . '-'
                     . $ones[$onesPosition];
         } elseif ($tensPosition > 0) {
           $result[] = $tens[$tensPosition];
@@ -425,7 +463,7 @@ class VMS extends CLP {
   protected static function countValidStrings($format) {
 
     // Store regex for determining whether given string is valid.
-    $regex = '/^$/';
+    $regex = '/^[a-e]+(?:\.[a-e]+)*@[a-e]+(?:\.[a-e]+)+$/';
 
     // If format doesn't contain wildcard, return 1 if valid string.
     if (substr_count($format, '?') == 0) {
